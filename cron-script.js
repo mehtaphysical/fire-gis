@@ -2,11 +2,11 @@ const https = require('https');
 const { MongoClient } = require('mongodb');
 
 let client;
-MongoClient.connect('mongodb://localhost:27017')
+MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true, useNewUrlParser: true })
   .then(async(c) => {
     client = c;
 
-    const db = client.db('gis');
+    const db = client.db('fire-gis');
     const evacuations = db.collection('evacuations');
     const thermals = db.collection('thermals');
     const wildfires = db.collection('wildfires');
@@ -18,9 +18,9 @@ MongoClient.connect('mongodb://localhost:27017')
     ]);
 
     return Promise.all([
-      evacuations.insert(evacuationGIS),
-      thermals.insert(thermalGIS),
-      wildfires.insert(wildfireGIS)
+      evacuations.insertOne(evacuationGIS),
+      thermals.insertOne(thermalGIS),
+      wildfires.insertOne(wildfireGIS)
     ]);
   })
   .catch(console.error)
