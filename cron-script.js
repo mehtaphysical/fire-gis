@@ -14,7 +14,7 @@ MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true, use
     const wildfires = db.collection('wildfires');
 
     const [evacuationGIS, thermalGIS, wildfireGIS] = await Promise.all([
-      fetch('https://services.arcgis.com/uUvqNMGPm7axC2dD/arcgis/rest/services/Fire_Evacuation_Areas_Public/FeatureServer/0?f=json'),
+      fetch('https://services.arcgis.com/uUvqNMGPm7axC2dD/arcgis/rest/services/Fire_Evacuation_Areas_Public/FeatureServer/0/query?f=json&where=1%3D1'),
       fetch('https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Satellite_VIIRS_Thermal_Hotspots_and_Fire_Activity/FeatureServer/0?f=json'),
       fetch('https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0?f=json')
     ]);
