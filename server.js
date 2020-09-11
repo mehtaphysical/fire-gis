@@ -2,7 +2,7 @@ const http = require('http');
 const { MongoClient } = require('mongodb');
 
 const getCount = (evacuations) => {
-  return evacuations.count()
+  return evacuations.countDocuments()
     .then(count => ({ count }));
 };
 
@@ -13,9 +13,9 @@ const getEvacuation = (evacuations, index) => {
 const handleRequest = evacuations => async(req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET OPTIONS');
-  const index = req.url.split('/').slice(-1);
+  const [index] = req.url.split('/').slice(-1);
 
-  const responseBody = await index === 'count' ? getCount(evacuations) : getEvacuation(evacuations, index);
+  const responseBody = await (index === 'count' ? getCount(evacuations) : getEvacuation(evacuations, index));
 
   res.end(JSON.stringify(responseBody));
 };
