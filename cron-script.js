@@ -10,20 +10,10 @@ MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true, use
 
     const db = client.db('fire-gis');
     const evacuations = db.collection('evacuations');
-    const thermals = db.collection('thermals');
-    const wildfires = db.collection('wildfires');
 
-    const [evacuationGIS, thermalGIS, wildfireGIS] = await Promise.all([
-      fetch('https://services.arcgis.com/uUvqNMGPm7axC2dD/arcgis/rest/services/Fire_Evacuation_Areas_Public/FeatureServer/0/query?f=json&where=1%3D1'),
-      fetch('https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Satellite_VIIRS_Thermal_Hotspots_and_Fire_Activity/FeatureServer/0?f=json'),
-      fetch('https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0?f=json')
-    ]);
+    const evacuationGIS = await fetch('https://services.arcgis.com/uUvqNMGPm7axC2dD/ArcGIS/rest/services/Fire_Evacuation_Areas_Public/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=Fire_Evacuation_Level%2CCounty%2CEvac_Area_Name&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=geojson');
 
-    return Promise.all([
-      evacuations.insertOne(evacuationGIS),
-      thermals.insertOne(thermalGIS),
-      wildfires.insertOne(wildfireGIS)
-    ]);
+    return evacuations.insertOne(evacuationGIS);
   })
   .catch(console.error)
   .finally(() => {
