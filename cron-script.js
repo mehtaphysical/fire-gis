@@ -16,8 +16,8 @@ MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true, use
     const thermalsGIS = await fetchWithRetry('https://services9.arcgis.com/RHVPKKiFTONKtxq3/ArcGIS/rest/services/Satellite_VIIRS_Thermal_Hotspots_and_Fire_Activity/FeatureServer/0/query?where=%28latitude+BETWEEN+42+AND+46%29+AND+%28longitude+BETWEEN+-124+AND+-117%29&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=frp%2Cconfidence%2Cesritimeutc&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=');
 
     return Promise.all([
-      evacuations.insertOne(evacuationGIS),
-      thermals.insertOne(thermalsGIS)
+      evacuations.insertOne({ ...evacuationGIS, createdAt: new Date() }),
+      thermals.insertOne({ ...thermalsGIS, createdAt: new Date() })
     ]);
   })
   .catch(console.error)
