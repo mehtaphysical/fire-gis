@@ -31,7 +31,9 @@ function fetch(url) {
 
       res.on('end', () => {
         try {
-          resolve(JSON.parse(body));
+          const json = JSON.parse(body);
+          if(json.error) reject(json.error);
+          else resolve(json);
         } catch{
           reject('Unable to parse JSON');
         }
